@@ -6,6 +6,6 @@ Repositorio del GRUPO 3 - `Trello https://trello.com/b/iiU1ljYT/grupo3`
 - 😄 Integrantes - `[4]`:
                       - `Joaco Pamphile`
                       - `Yoel Almirón`
-                      - `Federico Nagua`
+                      - `Federico Fernandez`
                       - `Gianfranco Carzolio`
 
