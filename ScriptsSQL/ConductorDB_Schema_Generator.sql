@@ -1,11 +1,11 @@
 
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `mydb2` DEFAULT CHARACTER SET utf8 ;
+USE `mydb2` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`PerfilConductor`
+-- Table `mydb2`.`PerfilConductor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`PerfilConductor` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`PerfilConductor` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `usuario` VARCHAR(45) NULL,
   `contra` VARCHAR(45) NULL,
@@ -16,7 +16,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Persona`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Persona` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Persona` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   `apellido` VARCHAR(45) NULL,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Persona` (
   INDEX `fk_Persona_PerfilConductor1_idx` (`PerfilConductor_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Persona_PerfilConductor1`
     FOREIGN KEY (`PerfilConductor_ID`)
-    REFERENCES `mydb`.`PerfilConductor` (`ID`)
+    REFERENCES `mydb2`.`PerfilConductor` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -37,7 +37,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Marca`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Marca` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Marca` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`))
@@ -47,7 +47,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Modelo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Modelo` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Modelo` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   `Marca_ID` INT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Modelo` (
   INDEX `fk_Modelo_Marca1_idx` (`Marca_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Modelo_Marca1`
     FOREIGN KEY (`Marca_ID`)
-    REFERENCES `mydb`.`Marca` (`ID`)
+    REFERENCES `mydb2`.`Marca` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -64,7 +64,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Vehiculo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Vehiculo` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `color` VARCHAR(45) NULL,
   `patente` VARCHAR(45) NULL,
@@ -78,12 +78,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Vehiculo` (
   INDEX `fk_Vehiculo_PerfilConductor1_idx` (`PerfilConductor_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Vehiculo_Modelo1`
     FOREIGN KEY (`Modelo_ID`)
-    REFERENCES `mydb`.`Modelo` (`ID`)
+    REFERENCES `mydb2`.`Modelo` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Vehiculo_PerfilConductor1`
     FOREIGN KEY (`PerfilConductor_ID`)
-    REFERENCES `mydb`.`PerfilConductor` (`ID`)
+    REFERENCES `mydb2`.`PerfilConductor` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -92,7 +92,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Pais`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Pais` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Pais` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`))
@@ -102,7 +102,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Provincia`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Provincia` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Provincia` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   `Pais_ID` INT NOT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Provincia` (
   INDEX `fk_Provincia_Pais1_idx` (`Pais_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Provincia_Pais1`
     FOREIGN KEY (`Pais_ID`)
-    REFERENCES `mydb`.`Pais` (`ID`)
+    REFERENCES `mydb2`.`Pais` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -119,7 +119,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Localidad`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Localidad` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Localidad1` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NULL,
   `codigoPostal` VARCHAR(45) NULL,
@@ -128,16 +128,30 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Localidad` (
   INDEX `fk_Localidad_Provincia1_idx` (`Provincia_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Localidad_Provincia1`
     FOREIGN KEY (`Provincia_ID`)
-    REFERENCES `mydb`.`Provincia` (`ID`)
+    REFERENCES `mydb2`.`Provincia` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
+CREATE TABLE IF NOT EXISTS `mydb2`.`Localidad2` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(45) NULL,
+  `codigoPostal` VARCHAR(45) NULL,
+  `Provincia_ID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_Localidad_Provincia2_idx` (`Provincia_ID` ASC) VISIBLE,
+  CONSTRAINT `fk_Localidad_Provincia2`
+    FOREIGN KEY (`Provincia_ID`)
+    REFERENCES `mydb2`.`Provincia` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 -- -----------------------------------------------------
 -- Table `mydb`.`Ubicacion`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Ubicacion` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Ubicacion` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `calle` VARCHAR(45) NULL,
   `numero` VARCHAR(45) NULL,
@@ -146,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Ubicacion` (
   INDEX `fk_Ubicacion_Localidad1_idx` (`Localidad_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Ubicacion_Localidad1`
     FOREIGN KEY (`Localidad_ID`)
-    REFERENCES `mydb`.`Localidad` (`ID`)
+    REFERENCES `mydb2`.`Localidad1` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -155,7 +169,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`EstadoViaje`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`EstadoViaje` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`EstadoViaje` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `observacion` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`))
@@ -165,11 +179,11 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Viaje`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Viaje` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`Viaje` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `cantidadDeLugaresDisponibles` INT NULL,
-  `fecha` DATE NULL,
-  `hora` TIME NULL,
+  `fecha` VARCHAR(255) NULL,
+  `hora` VARCHAR(255) NULL,
   `precioDelViaje` FLOAT NULL,
   `equipaje` BIT(1) NULL,
   `observacion` VARCHAR(255) NULL,
@@ -186,27 +200,27 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Viaje` (
   INDEX `fk_Viaje_EstadoViaje1_idx` (`EstadoViaje_ID` ASC) VISIBLE,
   CONSTRAINT `fk_Viaje_PerfilConductor`
     FOREIGN KEY (`PerfilConductor_ID`)
-    REFERENCES `mydb`.`PerfilConductor` (`ID`)
+    REFERENCES `mydb2`.`PerfilConductor` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Viaje_Vehiculo1`
     FOREIGN KEY (`Vehiculo_ID`)
-    REFERENCES `mydb`.`Vehiculo` (`ID`)
+    REFERENCES `mydb2`.`Vehiculo` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Viaje_Ubicacion1`
     FOREIGN KEY (`Origen_ID`)
-    REFERENCES `mydb`.`Ubicacion` (`ID`)
+    REFERENCES `mydb2`.`Localidad1` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Viaje_Ubicacion2`
     FOREIGN KEY (`Destino_ID`)
-    REFERENCES `mydb`.`Ubicacion` (`ID`)
+    REFERENCES `mydb2`.`Localidad2` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Viaje_EstadoViaje1`
     FOREIGN KEY (`EstadoViaje_ID`)
-    REFERENCES `mydb`.`EstadoViaje` (`ID`)
+    REFERENCES `mydb2`.`EstadoViaje` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -215,7 +229,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`EstadoPasajeroDetalle`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`EstadoPasajeroDetalle` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`EstadoPasajeroDetalle` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `observacion` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`))
@@ -225,7 +239,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`PasajeroDetalle`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`PasajeroDetalle` (
+CREATE TABLE IF NOT EXISTS `mydb2`.`PasajeroDetalle` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `detalle` VARCHAR(255) NULL,
   `Persona_ID` INT NOT NULL,
@@ -237,17 +251,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`PasajeroDetalle` (
   INDEX `fk_PasajeroDetalle_EstadoPasajeroDetalle1_idx` (`EstadoPasajeroDetalle_ID` ASC) VISIBLE,
   CONSTRAINT `fk_PasajeroDetalle_Persona1`
     FOREIGN KEY (`Persona_ID`)
-    REFERENCES `mydb`.`Persona` (`ID`)
+    REFERENCES `mydb2`.`Persona` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_PasajeroDetalle_Viaje1`
     FOREIGN KEY (`Viaje_ID`)
-    REFERENCES `mydb`.`Viaje` (`ID`)
+    REFERENCES `mydb2`.`Viaje` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_PasajeroDetalle_EstadoPasajeroDetalle1`
     FOREIGN KEY (`EstadoPasajeroDetalle_ID`)
-    REFERENCES `mydb`.`EstadoPasajeroDetalle` (`ID`)
+    REFERENCES `mydb2`.`EstadoPasajeroDetalle` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

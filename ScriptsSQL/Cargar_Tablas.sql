@@ -29,9 +29,15 @@ INSERT INTO provincia(ID,nombre,Pais_ID)
 VALUES (1,'Rio Negro',1),
 (2,'BS AS',1);
 
-INSERT INTO localidad(ID,nombre,codigoPostal,Provincia_ID)
+INSERT INTO localidad1(ID,nombre,codigoPostal,Provincia_ID)
 VALUES(1,'Bariloche','8324',1),
-(2,'La Plara','1900',2);
+(2,'La Plara','1900',2),
+(3,'Cipolletti','8324',1);
+
+INSERT INTO localidad2(ID,nombre,codigoPostal,Provincia_ID)
+VALUES(1,'Bariloche','8324',1),
+(2,'La Plara','1900',2),
+(3,'Cipolletti','8324',1);
 
 INSERT INTO ubicacion (ID,calle,numero,Localidad_ID)
 VALUES (1, 'Los Pinos', '334', 1),

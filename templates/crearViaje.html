@@ -2,28 +2,57 @@
 {% block body %}
 <!-- Title -->
 
-<div class="d-flex justify-content-center"></div>
-<h2>Crear Viaje</h2>
-</div>
+
 
 <!-- Form Control -->
-<div class="d-flex justify-content-center">
-  <form>
-    <div class="form-group">
-      <label for="InputFecha">Fecha</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-        placeholder="Enter fecha">
-    </div>
-    <div class="form-group">
-      <label for="InputVehiculo">Vehiculo</label>
-      <input type="vehiculo" class="form-control" id="exampleInputPassword1" placeholder="Ingrese Vehiculo">
-    </div>
-    <div class="form-group form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Crear</button>
-  </form>
-</div>
+<section class="crearViaje" id="crearViaje">
+  <h1>Crear un viaje Nuevo</h1>
+  <div class="caja-contact">
+      <h2>Rellene los datos del viaje</h2>
+      <div class="formulario-contacto">
+          <form  name="formContacto" method="post" action="/crearViaje">
+              <p>
+                  <label for="fecha">Fecha del Viaje</label>
+                  <input type="date" name="fecha" id="fecha" required> 
+              </p>
+              <p>
+                  <label for="hora">Hora del Viaje</label>
+                  <input type="time" name="hora" id="hora" required>
+              </p>
+              <p>
+                  <label for="origen">Origen</label>
+                  <select name="origen" id="origen_drop">
+                    {% for o in dropdown_origen %}
+                      <option id="valor" class="drop_ori" value="{{o[0]}}">{{o[1]}}</option>
+                    {%endfor%}
+                  </select>
+              </p>
+              <p>
+                <label for="destino">Destino</label>
+                <select name="destino" id="destino_drop">
+                {% for d in dropdown_destino %}
+                  <option id="valor" class="drop_dest" value="{{d[0]}}">{{d[1]}}</option>
+                {%endfor%}
+              </select>              
+              </p>
+              <p>
+                <label for="precio">Precio</label>
+                <input type="number" name="precio" placeholder="Ingrese el precio..." required>
+              </p>
+              <p>
+                <label for="patente">Patente</label>
+                <select name="patente" id="patente_drop">
+                  <option id="valor" class="drop_pat" value="AAA 111">AAA 111</option>
+                </select>              
+              </p>
+              <p class="bloque">
+                  <button type="submit" name="enviar">
+                      Crear
+                  </button>
+              </p>
+          </form>
+      </div>
+  </div>
+</section>
 
 {% endblock%}
