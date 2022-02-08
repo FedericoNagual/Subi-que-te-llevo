@@ -1,4 +1,5 @@
-from flask import Flask, config, render_template, request, session, url_for
+from flask import Flask, config, render_template, redirect, request, session, url_for
+from pyfladesk import init_gui
 import os
 import json
 from flask_mail import Mail, Message
@@ -47,12 +48,12 @@ def sendContactForm():
     
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    viajes = pd.read_sql('SELECT v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.observacion FROM viaje v JOIN vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN localidad1 lo on lo.ID = v.Origen_ID JOIN localidad2 ld ON ld.ID = v.Destino_ID JOIN estadoviaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
+    viajes = pd.read_sql('SELECT v.ID, v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.ID as estado FROM viaje v JOIN vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN localidad1 lo on lo.ID = v.Origen_ID JOIN localidad2 ld ON ld.ID = v.Destino_ID JOIN estadoviaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
     viajes_front = []
-    i = 0
     for index, row in viajes.iterrows():
         vi=[]
-        viaje = "viaje N° "+str(i)
+        v_id = row['ID']
+        viaje = v_id
         lugares = row['cantidadDeLugaresDisponibles']
         fecha = row['fecha']
         hora = row['hora']
@@ -60,16 +61,17 @@ def main():
         patente=row['patente']
         origen = row['origen']
         destino = row['destino'] 
-        vi.append(viaje)
-        vi.append(fecha)
-        vi.append(hora)
-        vi.append(origen)
-        vi.append(destino)
-        vi.append(precio)
-        vi.append(patente)
-        vi.append(lugares)
-        viajes_front.append(vi)
-        i = i+1
+        estado = row['estado']
+        if estado == 2:
+            vi.append(viaje)
+            vi.append(fecha)
+            vi.append(hora)
+            vi.append(origen)
+            vi.append(destino)
+            vi.append(precio)
+            vi.append(patente)
+            vi.append(lugares)
+            viajes_front.append(vi)
     return render_template('index.html', viajes_front=viajes_front)
     #return render_template('index.html', lugares=lugares, fecha=fecha, hora=hora, precio=precio, patente=patente, origen=origen, destino=destino)
 
@@ -101,9 +103,9 @@ def crearViaje():
         precio = request.form['precio']
         patente = request.form['patente']
 
-        cursor.execute("INSERT INTO viaje (cantidadDeLugaresDisponibles,fecha,hora,precioDelViaje,equipaje,observacion,PerfilConductor_ID,Vehiculo_ID,Origen_ID,Destino_ID,EstadoViaje_ID) VALUES (4,'{}','{}',{},1,'',1,1,{},{},1)".format(str(fecha),str(hora),float(precio),int(origen),int(destino)))
-        cursor.commit()
-        return url_for('main')
+        cursor.execute("INSERT INTO viaje (cantidadDeLugaresDisponibles,fecha,hora,precioDelViaje,equipaje,observacion,PerfilConductor_ID,Vehiculo_ID,Origen_ID,Destino_ID,EstadoViaje_ID) VALUES (4,'{}','{}',{},1,'',1,1,{},{},2)".format(str(fecha),str(hora),float(precio),int(origen),int(destino)))
+        conn.commit()
+        return redirect(url_for('main'))
     return render_template('crearViaje.html', dropdown_origen=dropdown_origen, dropdown_destino=dropdown_destino)
 
 @app.route("/verPerfil", methods=["GET", "POST"])
@@ -112,25 +114,19 @@ def verPerfil():
 
 @app.route("/historial", methods=["GET", "POST"])
 def historial():
-    return render_template('historial.html')
-
-
-
-@app.route("/contact", methods=["GET", "POST"])
-def contact():
-    viajes = pd.read_sql('SELECT v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.observacion FROM viaje v JOIN vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN localidad lo on lo.ID = v.Origen_ID JOIN localidad ld ON ld.ID = v.Destino_ID JOIN estadoviaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
+    viajes = pd.read_sql('SELECT v.ID, v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.observacion as estado FROM viaje v JOIN vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN localidad1 lo on lo.ID = v.Origen_ID JOIN localidad2 ld ON ld.ID = v.Destino_ID JOIN estadoviaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
     viajes_front = []
-    i = 0
     for index, row in viajes.iterrows():
         vi=[]
-        viaje = "viaje N° "+str(i)
-        lugares = row['cantidadDeLugaresDisponibles']
+        v_id = row['ID']
+        viaje = v_id
         fecha = row['fecha']
         hora = row['hora']
         precio = row['precioDelViaje']
         patente=row['patente']
         origen = row['origen']
         destino = row['destino'] 
+        estado = row['estado']
         vi.append(viaje)
         vi.append(fecha)
         vi.append(hora)
@@ -138,16 +134,22 @@ def contact():
         vi.append(destino)
         vi.append(precio)
         vi.append(patente)
-        vi.append(lugares)
+        vi.append(estado)
         viajes_front.append(vi)
+    return render_template('historial.html', viajes_front=viajes_front)
+
+
+@app.route("/cancelar", methods=["GET", "POST"])
+def cancelar():
     if request.method == 'POST':
-        print('entró')
+        viaje = request.form.get('viaje')
+        viaje = json.loads(viaje)
+        cursor.execute("UPDATE viaje SET EstadoViaje_ID = 3 WHERE ID = {}".format(viaje))
+        conn.commit()
         sendContactForm()
         
-        return render_template('index.html', viajes_front=viajes_front)
-
-
-    return render_template('index.html', viajes_front=viajes_front)
+        return redirect(url_for('historial'))
 
 if __name__ == '__main__':
-    app.run(port=5520, debug=True)
+    #app.run(port=5530, debug=True)
+    init_gui(app, width=360, height=640, window_title="Subi Que Te Llevo" )

@@ -9,7 +9,7 @@
               {%for viaje in viajes_front%}
               <div class="card">
                 <div class="box">
-                    <div class="text">{{viaje[0]}}</div>
+                    <div class="text">viaje N° - {{viaje[0]}}</div>
                     <img src="{{ url_for('static', filename='img/proy.jpg') }}" alt="">
                     <div class="resumen">
                       <p>Caracteristicas del viaje:<br></p>
@@ -22,8 +22,8 @@
                       <p>Asientos disponibles: {{viaje[7]}}</p>
 
                     </div>
-                    <form action="/contact" method="post">
-                      <button type="submit" class="effect">Cancelar Viaje</button>
+                    <form action="#" method="post">
+                      <button type="button" class="effect canc" value="{{viaje[0]}}">Cancelar Viaje</button>
                     </form>
                 </div>
             </div>
