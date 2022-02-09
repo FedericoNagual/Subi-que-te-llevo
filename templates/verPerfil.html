@@ -4,31 +4,32 @@
 
 
 <!-- Contenido de la tarjeta para cada persona, con sus datos del perfil-->
-<div class="fondoDiv container">
-  <h3 class=" text-center" style="margin : 12px;">Perfil</h3>
-  <div class="row justify-content-center align-items-center h-100" style="margin-top: 12px; margin-bottom: 12px;">
-    <div class="col-4">
-    <span class=""
-      ><img
-        class="bg-light rounded-circle "
-        id="imgLogoPersona"
-        src="img/icnPersona.png"
-        alt="Logo Persona"
-        style="width: 100% ; height:120px;"
-      /> 
-    </span>
-    <botton type="button" class="btn btn-success">Editar Foto</botton>
+<main class="viajes" id="viajes">
+  <div class="max-width">
+      <h2 class="title"><span>PERFIL</span></h2>
+      <div class="viaje-content">
+        {%for chofer in chofer_perf%}
+
+        <div class="card">
+          <div class="box">
+              <div class="text">BIENVENIDO</div>
+              <img id="imgperfil" src="{{ url_for('static', filename= chofer[4]) }}" alt="">
+              <div class="resumen">
+                <p>Sus datos:<br></p>
+                <p>Nombre: {{chofer[0]}}</p>
+                <p>Apellido: {{chofer[1]}}</p>
+                <p>DNI: {{chofer[2]}}</p>
+                <p>mail: {{chofer[3]}}</p>
+
+              </div>
+              <form action="#" method="post">
+                <button type="button" class="effect canc" value="{{chofer[0]}}">MODIFICAR DATOS</button>
+              </form>
+          </div>
+      </div>
+      {%endfor%}
+      </div>
   </div>
-    <div class="col-6 ">
-      <ul class="container-row-center border border-4 border-dark">
-        <li class="light"><h5>Nombre y apellido</h3></li>
-        <li>Edad: 30</li>
-        <li>DNI : 40003999</li>
-        <li>Email: juan@gmail.com</li>
-        <li>Estado : estado1</li>
-      </ul>
-    </div>
-  </div>
-</div>
+</main>
 
 {% endblock%}

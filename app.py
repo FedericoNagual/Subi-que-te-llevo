@@ -26,10 +26,10 @@ app.config['MAIL_PASSWORD'] = passwd
 mail = Mail(app)
 
 #Coneccion al server de la BD
-conn = mysql.connector.connect(host='localhost',
-                                user = 'root',
-                                password = '1234',
-                                database='mydb2')
+conn = mysql.connector.connect(host='mydb.cn9l7lrgturn.us-east-2.rds.amazonaws.com',
+                                user = 'root', 
+                                password = 'Con_1_2022', #Con_1_2022
+                                database='mydb') #mydb
 #Crear el cursor
 cursor = conn.cursor()
 
@@ -48,7 +48,7 @@ def sendContactForm():
     
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    viajes = pd.read_sql('SELECT v.ID, v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.ID as estado FROM viaje v JOIN vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN localidad1 lo on lo.ID = v.Origen_ID JOIN localidad2 ld ON ld.ID = v.Destino_ID JOIN estadoviaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
+    viajes = pd.read_sql('SELECT v.ID, v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.ID as estado FROM Viaje v JOIN Vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN Localidad1 lo on lo.ID = v.Origen_ID JOIN Localidad2 ld ON ld.ID = v.Destino_ID JOIN EstadoViaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
     viajes_front = []
     for index, row in viajes.iterrows():
         vi=[]
@@ -78,7 +78,7 @@ def main():
 @app.route("/crearViaje", methods=["GET", "POST"])
 def crearViaje():
     dropdown_origen = []
-    origenes = pd.read_sql('SELECT ID, nombre FROM localidad1', conn,  index_col = None)
+    origenes = pd.read_sql('SELECT ID, nombre FROM Localidad1', conn,  index_col = None)
     for index, row in origenes.iterrows():
         orig = []
         id = row['ID']
@@ -87,7 +87,7 @@ def crearViaje():
         orig.append(ori)
         dropdown_origen.append(orig)
     dropdown_destino = []
-    destinos = pd.read_sql('SELECT ID, nombre FROM localidad2', conn,  index_col = None)
+    destinos = pd.read_sql('SELECT ID, nombre FROM Localidad2', conn,  index_col = None)
     for index, row in destinos.iterrows():
         dest = []
         id = row['ID']
@@ -103,18 +103,34 @@ def crearViaje():
         precio = request.form['precio']
         patente = request.form['patente']
 
-        cursor.execute("INSERT INTO viaje (cantidadDeLugaresDisponibles,fecha,hora,precioDelViaje,equipaje,observacion,PerfilConductor_ID,Vehiculo_ID,Origen_ID,Destino_ID,EstadoViaje_ID) VALUES (4,'{}','{}',{},1,'',1,1,{},{},2)".format(str(fecha),str(hora),float(precio),int(origen),int(destino)))
+        cursor.execute("INSERT INTO Viaje (cantidadDeLugaresDisponibles,fecha,hora,precioDelViaje,equipaje,observacion,PerfilConductor_ID,Vehiculo_ID,Origen_ID,Destino_ID,EstadoViaje_ID) VALUES (4,'{}','{}',{},1,'',1,1,{},{},2)".format(str(fecha),str(hora),float(precio),int(origen),int(destino)))
         conn.commit()
         return redirect(url_for('main'))
     return render_template('crearViaje.html', dropdown_origen=dropdown_origen, dropdown_destino=dropdown_destino)
 
 @app.route("/verPerfil", methods=["GET", "POST"])
 def verPerfil():
-    return render_template('verPerfil.html')
+    chofer = pd.read_sql('SELECT nombre, apellido, dni, mail, rutaFoto FROM Persona WHERE ID = 1', conn, index_col = None)
+    chofer_perf = []
+    for index, row in chofer.iterrows():
+        c=[]
+        nombre = row['nombre']
+        apellido = row['apellido']
+        dni = row['dni']
+        mail = row['mail']
+        foto = row['rutaFoto']
+        c.append(nombre)
+        c.append(apellido)
+        c.append(dni)
+        c.append(mail)
+        c.append(foto)
+        chofer_perf.append(c)
+
+    return render_template('verPerfil.html', chofer_perf=chofer_perf)
 
 @app.route("/historial", methods=["GET", "POST"])
 def historial():
-    viajes = pd.read_sql('SELECT v.ID, v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.observacion as estado FROM viaje v JOIN vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN localidad1 lo on lo.ID = v.Origen_ID JOIN localidad2 ld ON ld.ID = v.Destino_ID JOIN estadoviaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
+    viajes = pd.read_sql('SELECT v.ID, v.cantidadDeLugaresDisponibles, v.fecha, v.hora, v.precioDelViaje, v.equipaje, ve.patente, lo.nombre AS origen, ld.nombre AS destino, ev.observacion as estado FROM Viaje v JOIN Vehiculo ve ON ve.ID = v.Vehiculo_ID JOIN Localidad1 lo on lo.ID = v.Origen_ID JOIN Localidad2 ld ON ld.ID = v.Destino_ID JOIN EstadoViaje ev ON ev.ID = v.EstadoViaje_ID', conn, index_col = None)
     viajes_front = []
     for index, row in viajes.iterrows():
         vi=[]

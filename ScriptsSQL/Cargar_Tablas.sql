@@ -5,10 +5,10 @@ VALUES (1,'Joaquin','1234'),
 (4,'Fede','1234');
 
 INSERT INTO persona (ID,nombre,apellido,dni,rutaFoto,mail,PerfilConductor_ID)
-VALUES(1,'Joaquin','Pamphile',11111111,'.static/src/img/joaquin.jpg','joacojota2@gmail.com',1),
-(2,'Gian','Carzolio',22222222,'.static/src/img/gian.jpg','gian@gmail.com',2),
-(3,'Yoel','Almiron',33333333,'.static/src/img/yoel.jpg','yoel@gmail.com',3),
-(4,'Fede','Fernandez',44444444,'.static/src/img/fede.jpg','fede@gmail.com',4);
+VALUES(1,'Joaquin','Pamphile',11111111,'img/joaquin.jpg','joacojota2@gmail.com',1),
+(2,'Gian','Carzolio',22222222,'img/gian.jpg','gian@gmail.com',2),
+(3,'Yoel','Almiron',33333333,'img/yoel.jpg','yoel@gmail.com',3),
+(4,'Fede','Fernandez',44444444,'img/fede.jpg','fede@gmail.com',4);
 
 INSERT INTO marca (ID, nombre)
 VALUES (1, 'Ford');
@@ -31,13 +31,15 @@ VALUES (1,'Rio Negro',1),
 
 INSERT INTO localidad1(ID,nombre,codigoPostal,Provincia_ID)
 VALUES(1,'Bariloche','8324',1),
-(2,'La Plara','1900',2),
-(3,'Cipolletti','8324',1);
+(2,'La Plata','1900',2),
+(3,'Cipolletti','8324',1),
+(4,'CABA', 1128);
 
 INSERT INTO localidad2(ID,nombre,codigoPostal,Provincia_ID)
 VALUES(1,'Bariloche','8324',1),
 (2,'La Plara','1900',2),
-(3,'Cipolletti','8324',1);
+(3,'Cipolletti','8324',1),
+(4,'CABA', 1128);
 
 INSERT INTO ubicacion (ID,calle,numero,Localidad_ID)
 VALUES (1, 'Los Pinos', '334', 1),
@@ -55,7 +57,7 @@ VALUES(1,'Admitido'),
 (4,'Pendiente');
 
 INSERT INTO viaje (ID,cantidadDeLugaresDisponibles,fecha,hora,precioDelViaje,equipaje,observacion,PerfilConductor_ID,Vehiculo_ID,Origen_ID,Destino_ID,EstadoViaje_ID)
-VALUES (1,2,'2022-3-23','08:30',10000,1,'sarasa',1,1,2,1,1),
+VALUES (1,2,'2022-3-23','08:30',10000,1,'sarasa',1,1,2,1,2),
 (2,0,'2022-3-30','08:30',12000,1,'sarasa',1,1,1,2,1);
 
 INSERT INTO pasajerodetalle(ID,detalle,Persona_ID,Viaje_ID,EstadoPasajeroDetalle_ID)
