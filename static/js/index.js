@@ -6,7 +6,7 @@ $('.canc').click(function(){
         "/cancelar",
         {viaje:viaje},
         function(data){
-
+            window.location = "/historial"
         }
     )
 })

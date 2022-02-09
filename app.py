@@ -160,11 +160,15 @@ def cancelar():
     if request.method == 'POST':
         viaje = request.form.get('viaje')
         viaje = json.loads(viaje)
-        cursor.execute("UPDATE viaje SET EstadoViaje_ID = 3 WHERE ID = {}".format(viaje))
+        cursor.execute("UPDATE Viaje SET EstadoViaje_ID = 3 WHERE ID = {}".format(viaje))
         conn.commit()
         sendContactForm()
         
         return redirect(url_for('historial'))
+
+@app.route("/modificar", methods=["GET","POST"])
+def modificar():
+    return redirect(url_for('historial'))
 
 if __name__ == '__main__':
     #app.run(port=5530, debug=True)
